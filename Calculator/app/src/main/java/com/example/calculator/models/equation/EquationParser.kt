@@ -66,18 +66,20 @@ class EquationParser (private val tokens: ArrayList<Token>) {
             }
         }
 
-        while (stack.size > 1) {
-            val num2 = stack.pop()
-            val op = stack.pop()
-            val num1 = stack.pop()
+        val reversedStack = flipStack(stack)
+
+        while (reversedStack.size > 1) {
+            val num1 = reversedStack.pop()
+            val op = reversedStack.pop()
+            val num2 = reversedStack.pop()
 
 
             when (op) {
                 "+" -> {
-                    stack.push(add(num1, num2))
+                    reversedStack.push(add(num1, num2))
                 }
                 "-" -> {
-                    stack.push(sub(num1, num2))
+                    reversedStack.push(sub(num1, num2))
                 }
                 else -> {
                     throw Exception("Operator expected got $op")
@@ -85,7 +87,7 @@ class EquationParser (private val tokens: ArrayList<Token>) {
             }
         }
 
-        return stack.pop()
+        return reversedStack.pop()
     }
 
     private fun makeSafe(tokens: ArrayList<Token>) {
@@ -94,13 +96,13 @@ class EquationParser (private val tokens: ArrayList<Token>) {
         }
 
         if (tokens.size > 1 && tokens[tokens.size - 1].type == TokenType.OPERATION) {
-            tokens.add(SpaceToken())
-            tokens.add(DigitToken("0"))
+            tokens.removeAt(tokens.size - 1)
             return
         }
 
         if (tokens.size > 2 && tokens[tokens.size - 1].type == TokenType.SPACE && tokens[tokens.size - 2].type == TokenType.OPERATION) {
-            tokens.add(DigitToken("0"))
+            tokens.removeAt(tokens.size - 1)
+            tokens.removeAt(tokens.size - 1)
             return
         }
 
@@ -174,5 +176,15 @@ class EquationParser (private val tokens: ArrayList<Token>) {
         override fun toString(): String {
             return args.subList(index - 1, args.size - 1).toString()
         }
+    }
+
+    private fun flipStack(stack: Stack<String>): Stack<String> {
+        val flipped = Stack<String>()
+
+        while (stack.isNotEmpty()) {
+            flipped.push(stack.pop())
+        }
+
+        return flipped
     }
 }

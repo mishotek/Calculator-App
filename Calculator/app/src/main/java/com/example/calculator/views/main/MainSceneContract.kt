@@ -1,7 +1,5 @@
 package com.example.calculator.views.main
 
-import com.example.calculator.models.MathematicalOperation
-
 interface MainSceneContract {
 
     interface View {
@@ -10,10 +8,9 @@ interface MainSceneContract {
     }
 
     interface Presenter {
-        fun appendOperation(op: MathematicalOperation)
-        fun appendDigit(digit: String)
-        fun appendDot()
+        fun append(item: String)
         fun pop()
         fun calc()
+        fun serialize(): String
     }
 }

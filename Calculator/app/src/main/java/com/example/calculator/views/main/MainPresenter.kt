@@ -1,29 +1,16 @@
 package com.example.calculator.views.main
-
-import com.example.calculator.models.*
 import com.example.calculator.models.equation.Equation
-import com.example.calculator.models.equation.EquationBuilder
 
-class MainPresenter(var view: MainSceneContract.View) : MainSceneContract.Presenter {
+class MainPresenter(var view: MainSceneContract.View, serialized: String?) : MainSceneContract.Presenter {
 
-    private val equation: Equation = Equation()
+    private val equation: Equation = Equation(serialized)
 
     init {
         updateView()
     }
 
-    override fun appendOperation(op: MathematicalOperation) {
-        equation.appendOperation(op)
-        updateView()
-    }
-
-    override fun appendDigit(digit: String) {
-        equation.appendDigit(digit)
-        updateView()
-    }
-
-    override fun appendDot() {
-        equation.appendDot()
+    override fun append(item: String) {
+        equation.append(item)
         updateView()
     }
 
@@ -39,6 +26,10 @@ class MainPresenter(var view: MainSceneContract.View) : MainSceneContract.Presen
 
         view.showEquation(res)
         view.showResult("")
+    }
+
+    override fun serialize(): String {
+        return equation.serialize()
     }
 
     private fun updateView() {

@@ -2,21 +2,33 @@ package com.example.calculator.views.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.widget.TextView
 import com.example.calculator.R
 import com.example.calculator.components.CalcButton
 import com.example.calculator.models.MathematicalOperation
+import com.example.calculator.models.OperationLiterals
 
 class MainActivity : AppCompatActivity(), MainSceneContract.View {
 
+    private val STATE_KEY = "equationStr"
     private lateinit var presenter: MainSceneContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
-        presenter = MainPresenter(this)
+        val serializedPresenter = savedInstanceState?.getString(STATE_KEY)
+
+        presenter = MainPresenter(this, serializedPresenter)
         addClickListeners()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_KEY, presenter.serialize())
     }
 
     override fun showEquation(equation: String) {
@@ -32,27 +44,27 @@ class MainActivity : AppCompatActivity(), MainSceneContract.View {
         findViewById<CalcButton>(R.id.calcButtonAc)?.setOnClickListener { presenter.pop() }
 
         // Listen to operations
-        findViewById<CalcButton>(R.id.calcButtonDiv)?.setOnClickListener { presenter.appendOperation(MathematicalOperation.DIVIDE) }
-        findViewById<CalcButton>(R.id.calcButtonMul)?.setOnClickListener { presenter.appendOperation(MathematicalOperation.MULTIPLY) }
-        findViewById<CalcButton>(R.id.calcButtonSub)?.setOnClickListener { presenter.appendOperation(MathematicalOperation.SUBTRACT) }
-        findViewById<CalcButton>(R.id.calcButtonAdd)?.setOnClickListener { presenter.appendOperation(MathematicalOperation.ADD) }
+        findViewById<CalcButton>(R.id.calcButtonDiv)?.setOnClickListener { presenter.append(OperationLiterals.DIVIDE) }
+        findViewById<CalcButton>(R.id.calcButtonMul)?.setOnClickListener { presenter.append(OperationLiterals.MULTIPLY) }
+        findViewById<CalcButton>(R.id.calcButtonSub)?.setOnClickListener { presenter.append(OperationLiterals.SUBTRACT) }
+        findViewById<CalcButton>(R.id.calcButtonAdd)?.setOnClickListener { presenter.append(OperationLiterals.ADD) }
 
         // Listen to dot
-        findViewById<CalcButton>(R.id.calcButtonDot)?.setOnClickListener { presenter.appendDot() }
+        findViewById<CalcButton>(R.id.calcButtonDot)?.setOnClickListener { presenter.append(OperationLiterals.DOT) }
 
         // Listen to calc
         findViewById<CalcButton>(R.id.calcButtonEq)?.setOnClickListener { presenter.calc() }
 
         // Listen to numbers
-        findViewById<CalcButton>(R.id.calcButtonNum0)?.setOnClickListener { presenter.appendDigit("0") }
-        findViewById<CalcButton>(R.id.calcButtonNum1)?.setOnClickListener { presenter.appendDigit("1") }
-        findViewById<CalcButton>(R.id.calcButtonNum2)?.setOnClickListener { presenter.appendDigit("2") }
-        findViewById<CalcButton>(R.id.calcButtonNum3)?.setOnClickListener { presenter.appendDigit("3") }
-        findViewById<CalcButton>(R.id.calcButtonNum4)?.setOnClickListener { presenter.appendDigit("4") }
-        findViewById<CalcButton>(R.id.calcButtonNum5)?.setOnClickListener { presenter.appendDigit("5") }
-        findViewById<CalcButton>(R.id.calcButtonNum6)?.setOnClickListener { presenter.appendDigit("6") }
-        findViewById<CalcButton>(R.id.calcButtonNum7)?.setOnClickListener { presenter.appendDigit("7") }
-        findViewById<CalcButton>(R.id.calcButtonNum8)?.setOnClickListener { presenter.appendDigit("8") }
-        findViewById<CalcButton>(R.id.calcButtonNum9)?.setOnClickListener { presenter.appendDigit("9") }
+        findViewById<CalcButton>(R.id.calcButtonNum0)?.setOnClickListener { presenter.append("0") }
+        findViewById<CalcButton>(R.id.calcButtonNum1)?.setOnClickListener { presenter.append("1") }
+        findViewById<CalcButton>(R.id.calcButtonNum2)?.setOnClickListener { presenter.append("2") }
+        findViewById<CalcButton>(R.id.calcButtonNum3)?.setOnClickListener { presenter.append("3") }
+        findViewById<CalcButton>(R.id.calcButtonNum4)?.setOnClickListener { presenter.append("4") }
+        findViewById<CalcButton>(R.id.calcButtonNum5)?.setOnClickListener { presenter.append("5") }
+        findViewById<CalcButton>(R.id.calcButtonNum6)?.setOnClickListener { presenter.append("6") }
+        findViewById<CalcButton>(R.id.calcButtonNum7)?.setOnClickListener { presenter.append("7") }
+        findViewById<CalcButton>(R.id.calcButtonNum8)?.setOnClickListener { presenter.append("8") }
+        findViewById<CalcButton>(R.id.calcButtonNum9)?.setOnClickListener { presenter.append("9") }
     }
 }
