@@ -8,9 +8,11 @@ interface MainSceneContract {
     }
 
     interface Presenter {
+        fun initCalculator()
         fun append(item: String)
         fun pop()
         fun calc()
+        fun toggleTheme()
         fun serialize(): String
     }
 }

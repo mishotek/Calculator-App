@@ -1,11 +1,18 @@
 package com.example.calculator.views.main
+import android.app.Activity
+import com.example.calculator.models.Theme
 import com.example.calculator.models.equation.Equation
 
 class MainPresenter(var view: MainSceneContract.View, serialized: String?) : MainSceneContract.Presenter {
 
     private val equation: Equation = Equation(serialized)
+    private val theme: Theme = Theme(view as Activity)
 
     init {
+        theme.applyTheme()
+    }
+
+    override fun initCalculator() {
         updateView()
     }
 
@@ -26,6 +33,10 @@ class MainPresenter(var view: MainSceneContract.View, serialized: String?) : Mai
 
         view.showEquation(res)
         view.showResult("")
+    }
+
+    override fun toggleTheme() {
+        theme.toggleTheme()
     }
 
     override fun serialize(): String {

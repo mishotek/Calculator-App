@@ -8,13 +8,13 @@
     android:innerRadius="0dp"
     android:shape="ring"
     android:thicknessRatio="1.9"
-    app:cardBackgroundColor="#ff00ff"
+    app:cardBackgroundColor="?android:attr/colorButtonNormal"
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#21282d">
+        android:background="?android:attr/colorButtonNormal">
 
         <TextView
             android:id="@+id/buttonText"

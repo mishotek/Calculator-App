@@ -9,6 +9,7 @@ import com.example.calculator.R
 import com.example.calculator.components.CalcButton
 import com.example.calculator.models.MathematicalOperation
 import com.example.calculator.models.OperationLiterals
+import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity(), MainSceneContract.View {
 
@@ -18,12 +19,17 @@ class MainActivity : AppCompatActivity(), MainSceneContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
 
         val serializedPresenter = savedInstanceState?.getString(STATE_KEY)
-
         presenter = MainPresenter(this, serializedPresenter)
+
+        setContentView(R.layout.activity_main)
+
+        presenter.initCalculator()
+
         addClickListeners()
+        addThemeChangeListener()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -66,5 +72,11 @@ class MainActivity : AppCompatActivity(), MainSceneContract.View {
         findViewById<CalcButton>(R.id.calcButtonNum7)?.setOnClickListener { presenter.append("7") }
         findViewById<CalcButton>(R.id.calcButtonNum8)?.setOnClickListener { presenter.append("8") }
         findViewById<CalcButton>(R.id.calcButtonNum9)?.setOnClickListener { presenter.append("9") }
+    }
+
+    private fun addThemeChangeListener() {
+        findViewById<TextView>(R.id.themeSwitch)?.setOnClickListener {
+            presenter.toggleTheme()
+        }
     }
 }
